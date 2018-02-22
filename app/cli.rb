@@ -1,17 +1,26 @@
 #!/usr/bin/env ruby
 
 require 'slop'
+require_relative 'lib/algo'
 require_relative 'lib/store'
 
 opts = Slop.parse do |o|
-  o.string '-e', '--email', required: true
   o.bool '--show'
+  o.bool '--set'
+  o.string '-e', '--email'
+
+  o.bool '--comp'
+  o.string '-n', '--name'
 end
 
 if opts.show?
-  get_names(user: opts[:email]).each { |name|
+  get_names(user: opts[:email]).each do |name|
     p name
-  }
-else
-  store_names(user: opts[:email], names: opts.args)
+  end
+elsif opts.set?
+  set_names(user: opts[:email], names: opts.args)
+elsif opts.comp?
+  get_names_by_user().each do |user, names|
+    p "#{user}: #{names.map { |name| distance(name, opts[:name]) }.min}"
+  end
 end

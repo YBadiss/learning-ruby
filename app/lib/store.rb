@@ -2,7 +2,7 @@ require 'sqlite3'
 
 DATABASE = "kiddo.db"
 
-def store_names(user:, names:)
+def set_names(user:, names:)
   validate_names(names: names)
 
   SQLite3::Database.new( DATABASE ) do |db|
@@ -24,7 +24,16 @@ end
 
 def get_names(user:)
   SQLite3::Database.new( DATABASE ) do |db|
-    result = db.execute( "SELECT name FROM name_ideas WHERE user = ?", user)
-    return result.map { |row| row.first }
+    cursor = db.execute( "SELECT name FROM name_ideas WHERE user = ?", user)
+    return cursor.map { |row| row[0] }
+  end
+end
+
+def get_names_by_user
+  SQLite3::Database.new( DATABASE ) do |db|
+    cursor = db.execute( "SELECT user, name FROM name_ideas")
+    result = Hash.new { Array.new }
+    cursor.map { |row| result[row[0]] += [row[1]]}
+    return result
   end
 end
