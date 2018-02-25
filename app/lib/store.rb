@@ -22,16 +22,19 @@ def validate_names(names:)
   raise "The names must be different" unless names.uniq!.nil?
 end
 
-def get_names(user:)
+def get_names_by_user(selected_user: nil)
   SQLite3::Database.new( DATABASE ) do |db|
-    cursor = db.execute( "SELECT name FROM name_ideas WHERE user = ?", user)
-    return cursor.map { |row| row[0] }
+    _fetch_names_by_user().each do |user, names|
+      if selected_user.nil? or selected_user == user
+        yield user, names
+      end
+    end
   end
 end
 
-def get_names_by_user
+def _fetch_names_by_user
   SQLite3::Database.new( DATABASE ) do |db|
-    cursor = db.execute( "SELECT user, name FROM name_ideas")
+    cursor = db.execute( "SELECT user, name FROM name_ideas;")
     result = Hash.new { Array.new }
     cursor.map { |row| result[row[0]] += [row[1]]}
     return result

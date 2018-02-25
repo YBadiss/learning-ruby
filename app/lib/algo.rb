@@ -12,3 +12,7 @@ def distance(word1, word2)
 
   return d[word1.length][word2.length]
 end
+
+def best_name(names, target_name)
+  return names.map { |name| [distance(name, target_name), name] }.min.reverse
+end
