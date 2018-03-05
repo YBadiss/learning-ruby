@@ -1,4 +1,12 @@
 <p>
-  <strong>Email:</strong>
-  <%= @user.email %>
+  <strong>Name:</strong>
+  <%= @user.name %>
+</p>
+<p>
+  <strong>Password digest:</strong>
+  <%= @user.password_digest %>
+</p>
+
+<p>
+  <%= link_to 'List Users', users_path %>
 </p>

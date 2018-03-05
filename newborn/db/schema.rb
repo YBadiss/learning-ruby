@@ -12,10 +12,12 @@
 
 ActiveRecord::Schema.define(version: 20180301212957) do
 
-  create_table "users", primary_key: "email", id: :string, force: :cascade do |t|
+  create_table "users", primary_key: "name", id: :string, force: :cascade do |t|
+    t.string "password_digest"
+    t.string "salt"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["email"], name: "sqlite_autoindex_users_1", unique: true
+    t.index ["name"], name: "sqlite_autoindex_users_1", unique: true
   end
 
 end
