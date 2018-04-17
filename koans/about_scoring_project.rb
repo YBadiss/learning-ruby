@@ -29,8 +29,25 @@ require File.expand_path(File.dirname(__FILE__) + '/neo')
 #
 # Your goal is to write the score method.
 
+POINTS = Hash.new(0)
+POINTS[1] = 100
+POINTS[5] = 50
+
+MULTIPLIER = Hash.new(100)
+MULTIPLIER[1] = 1000
+
+
 def score(dice)
-  # You need to write this method
+  result = 0
+  grouped_values = dice.group_by { |x| x }
+  grouped_values.merge(grouped_values) { |_, v| v.size }.each do |k, v|
+    while v >= 3 do
+      result += k * MULTIPLIER[k]
+      v -= 3
+    end
+    result += v * POINTS[k]
+  end
+  result
 end
 
 class AboutScoringProject < Neo::Koan
